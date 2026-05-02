@@ -1,4 +1,5 @@
 import * as interviewService from "../services/interview.service.js";
+import { transcribeAudio } from "../services/assemblyai.service.js";
 
 export const startInterview = async (req, res, next) => {
   try {
@@ -56,6 +57,71 @@ export const submitAnswer = async (req, res, next) => {
     res.json({
       success: true,
       data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const submitVoiceAnswer = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "No audio file uploaded.",
+      });
+    }
+
+    const transcribedText = await transcribeAudio(
+      req.file.buffer,
+      req.file.originalname || "answer.webm"
+    );
+
+    if (!transcribedText || transcribedText.trim() === "") {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Could not transcribe audio. Please speak clearly and try again.",
+      });
+    }
+
+    const result = await interviewService.submitAnswer(
+      id,
+      req.user._id,
+      transcribedText
+    );
+
+    res.json({
+      success: true,
+      data: {
+        ...result,
+        transcribedText,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const transcribeOnly = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "No audio file uploaded.",
+      });
+    }
+
+    const transcribedText = await transcribeAudio(
+      req.file.buffer,
+      req.file.originalname || "answer.webm"
+    );
+
+    res.json({
+      success: true,
+      data: { transcribedText },
     });
   } catch (error) {
     next(error);
