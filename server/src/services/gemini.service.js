@@ -1,4 +1,4 @@
-import { generateContent } from "../config/gemini.config/js";
+import { generateContent } from "../config/gemini.config.js";
 
 export const askGemini = async (prompt) => {
   try {
