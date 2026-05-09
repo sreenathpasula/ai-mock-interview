@@ -3,8 +3,6 @@ dotenv.config();
 
 export const generateAudio = async (text) => {
   try {
-    // split text into chunks of 200 chars
-    // Google TTS has a character limit per request
     const chunks = splitTextIntoChunks(text, 200);
     const audioBuffers = [];
 
