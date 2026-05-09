@@ -1,5 +1,6 @@
 import * as interviewService from "../services/interview.service.js";
 import { transcribeAudio } from "../services/assemblyai.service.js";
+import { streamAudio, generateAudio } from "../services/elevenlabs.service.js";
 
 export const startInterview = async (req, res, next) => {
   try {
@@ -153,6 +154,42 @@ export const getInterview = async (req, res, next) => {
     res.json({
       success: true,
       data: interview,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const speakText = async (req, res, next) => {
+  try {
+    const { text } = req.body;
+
+    if (!text) {
+      return res.status(400).json({
+        success: false,
+        message: "No text provided to speak.",
+      });
+    }
+    await streamAudio(text, res);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const generateAudioBase64 = async (req, res, next) => {
+  try {
+    const { text } = req.body;
+    if (!text) {
+      return res.status(400).json({
+        success: false,
+        message: "No text provided.",
+      });
+    }
+    const audioBase64 = await generateAudio(text);
+
+    res.json({
+      success: true,
+      data: { audioBase64 },
     });
   } catch (error) {
     next(error);

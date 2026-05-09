@@ -4,6 +4,8 @@ import {
   submitAnswer,
   submitVoiceAnswer,
   transcribeOnly,
+  speakText,
+  generateAudioBase64,
   endInterview,
   getInterview,
 } from "../controllers/interview.controller.js";
@@ -17,6 +19,8 @@ router.use(authentication);
 router.post("/start", startInterview);
 
 router.post("/transcribe", uploadAudio, transcribeOnly);
+router.post("/speak", speakText);
+router.post("/audio", generateAudioBase64);
 
 router.post("/:id/voice", uploadAudio, submitVoiceAnswer);
 
