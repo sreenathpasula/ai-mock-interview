@@ -4,7 +4,6 @@ import API from "../../api/axios.js";
 import Navbar from "../../components/Navbar/index.jsx";
 import "./InterviewSetupPage.css";
 
-// available job roles
 const ROLES = [
   "Full Stack Developer",
   "Frontend Developer",
@@ -16,7 +15,6 @@ const ROLES = [
   "Python Developer",
 ];
 
-// question count options
 const QUESTION_OPTIONS = [
   { label: "5 Questions", value: 5, time: "~10 mins" },
   { label: "10 Questions", value: 10, time: "~20 mins" },
@@ -26,23 +24,18 @@ const QUESTION_OPTIONS = [
 const InterviewSetupPage = () => {
   const navigate = useNavigate();
 
-  // wizard step (1, 2, or 3)
   const [step, setStep] = useState(1);
 
-  // selected values
   const [selectedRole, setSelectedRole] = useState("");
   const [totalQuestions, setTotalQuestions] = useState(5);
 
-  // resume state
   const [resumeText, setResumeText] = useState("");
   const [resumeFileName, setResumeFileName] = useState("");
   const [uploading, setUploading] = useState(false);
 
-  // loading when starting interview
   const [starting, setStarting] = useState(false);
   const [error, setError] = useState("");
 
-  // load saved resume when page opens
   useEffect(() => {
     const loadResume = async () => {
       try {
@@ -51,14 +44,11 @@ const InterviewSetupPage = () => {
           setResumeText(response.data.data.text);
           setResumeFileName(response.data.data.fileName);
         }
-      } catch (error) {
-        // no resume saved yet — that's okay
-      }
+      } catch (error) {}
     };
     loadResume();
   }, []);
 
-  // handle PDF file upload
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -88,7 +78,6 @@ const InterviewSetupPage = () => {
     }
   };
 
-  // start interview
   const handleStartInterview = async () => {
     if (!resumeText) {
       setError("Please upload your resume first.");
@@ -107,7 +96,6 @@ const InterviewSetupPage = () => {
 
       const { interviewId } = response.data.data;
 
-      // redirect to interview page
       navigate(`/interview/${interviewId}`);
     } catch (error) {
       setError("Failed to start interview. Please try again.");
@@ -249,9 +237,7 @@ const InterviewSetupPage = () => {
                   onClick={handleStartInterview}
                   disabled={starting || !resumeText}
                 >
-                  {starting
-                    ? "🤖 Generating Questions..."
-                    : "🎤 Start Interview"}
+                  {starting ? " Generating Questions..." : " Start Interview"}
                 </button>
               </div>
             </div>

@@ -4,6 +4,9 @@ import LoginPage from "./pages/LoginPage/index.jsx";
 import RegisterPage from "./pages/RegisterPage/index.jsx";
 import HomePage from "./pages/HomePage/index.jsx";
 import InterviewSetupPage from "./pages/InterviewSetupPage/index.jsx";
+import InterviewPage from "./pages/InterviewPage/index.jsx";
+import FeedbackPage from "./pages/FeedbackPage/index.jsx";
+import HistoryPage from "./pages/HistoryPage/index.jsx";
 import ProtectedRoute from "./components/ProtectedRoute/index.jsx";
 
 function App() {
@@ -11,6 +14,7 @@ function App() {
 
   return (
     <Routes>
+      {/* Public routes */}
       <Route
         path="/login"
         element={user ? <Navigate to="/" /> : <LoginPage />}
@@ -19,6 +23,8 @@ function App() {
         path="/register"
         element={user ? <Navigate to="/" /> : <RegisterPage />}
       />
+
+      {/* Protected routes */}
       <Route
         path="/"
         element={
@@ -35,6 +41,32 @@ function App() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/interview/:id"
+        element={
+          <ProtectedRoute>
+            <InterviewPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/feedback/:id"
+        element={
+          <ProtectedRoute>
+            <FeedbackPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/history"
+        element={
+          <ProtectedRoute>
+            <HistoryPage />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Catch all */}
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
