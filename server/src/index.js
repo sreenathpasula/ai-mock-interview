@@ -10,13 +10,20 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ✅ updated CORS — allow both local and deployed frontend
+// app.use(
+//   cors({
+//     origin: [
+//       "http://localhost:5173",
+//       "https://ai-mock-interview-livid-one.vercel.app",
+//     ],
+//     credentials: true,
+//   })
+// );
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://your-app.vercel.app", // add this after deploying frontend
-    ],
-    credentials: true,
+    origin: "*",
+    credentials: false,
   })
 );
 
