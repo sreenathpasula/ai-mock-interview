@@ -3,19 +3,32 @@ import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import routes from "./routes/index.js";
+
 dotenv.config();
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+// ✅ updated CORS — allow both local and deployed frontend
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://your-app.vercel.app", // add this after deploying frontend
+    ],
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 app.use("/api", routes);
 
 app.use((err, req, res, next) => {
   const status = err.statusCode || 500;
-  res
-    .status(status)
-    .json({ success: false, message: err.message || "Server Error" });
+  res.status(status).json({
+    success: false,
+    message: err.message || "Server Error",
+  });
 });
 
 mongoose
