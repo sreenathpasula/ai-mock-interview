@@ -9,6 +9,20 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Allow ALL origins (not recommended for production)
+app.use(cors());
+
+// OR allow specific origins (recommended)
+app.use(
+  cors({
+    origin:
+      "https://ai-mock-interview-n9aoguqnr-sreenathpasulas-projects.vercel.app",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true, // only if you send cookies/auth headers
+  })
+);
+
 // ✅ updated CORS — allow both local and deployed frontend
 // app.use(
 //   cors({
@@ -20,12 +34,12 @@ const PORT = process.env.PORT || 3000;
 //   })
 // );
 
-app.use(
-  cors({
-    origin: "*",
-    credentials: false,
-  })
-);
+// app.use(
+//   cors({
+//     origin: "*",
+//     credentials: false,
+//   })
+// );
 
 app.use(express.json());
 app.use("/api", routes);
