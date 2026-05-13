@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import os from "os";
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ path: "./.env" });
 
 const client = new AssemblyAI({
   apiKey: process.env.ASSEMBLYAI_API_KEY,
