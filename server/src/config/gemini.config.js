@@ -1,21 +1,19 @@
-import { GoogleGenAI } from "@google/genai";
+import Groq from "groq-sdk";
 import dotenv from "dotenv";
-dotenv.config({ path: "./.env" });
+dotenv.config();
 
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
 });
-
-const MODEL_NAME = "gemini-2.5-flash";
 
 export const generateContent = async (prompt) => {
   try {
-    const response = await ai.models.generateContent({
-      model: MODEL_NAME,
-      contents: prompt,
+    const completion = await groq.chat.completions.create({
+      messages: [{ role: "user", content: prompt }],
+      model: "llama-3.3-70b-versatile",
     });
-    return response.text;
+    return completion.choices[0].message.content;
   } catch (error) {
-    throw new Error(`Gemini API error: ${error.message}`);
+    throw new Error(`Groq API error: ${error.message}`);
   }
 };
